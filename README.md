@@ -1,2 +1,2 @@
-# Roseibium_genome_assembly
-Long read and hybrid assembly of Roseibium sp. Sym1
+# Roseibium sp. Sym1 hybrid genome assembly
+# Script and input files for hybrid genome assembly 
