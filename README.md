@@ -11,8 +11,6 @@ A full annotation of this genome can be found at JGI IMG/MER under Project ID: G
 # Files in this repository
 
 Hybrid assembly and long reads assembly script
-- Input file (short reads): 59_1_S254_R1_001.fastq.gz
-- Input file (short reads): 59_1_S254_R2_001.fastq.gz
-- Input file (long reads): Labrenzia_longread_nanopore.fastq.gz
+- roseibium_hybrid_assembly_script.txt
 - Output file (graph): assembly.gfa
 - Output file (final assembly): corrected_roseibium_assembly_final.fa
