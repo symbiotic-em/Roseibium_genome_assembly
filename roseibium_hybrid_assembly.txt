@@ -1,0 +1,66 @@
+############## Getting ready ###################################################################
+#activate the conda environment that has all necessary packages, mine is "hybrid_assembly"
+conda activate hybrid_assembly
+#unicycler, fastp, NanoFilt, checkm, pilon, flye
+
+#make sure you have sufficient allocation/memory on the server you will be using 
+
+#download "bandage" visualization tool: https://rrwick.github.io/Bandage/
+
+################ QC short and long reads ########################################################
+#QC short reads with fastp
+fastp --in1 59_1_S254_R1_001.fastq.gz  --in2  59_1_S254_R2_001.fastq.gz --out1 short_1.fastq.gz --out2 short_2.fastq.gz 
+
+#QC long reads with NanoFilt
+#remove all sequences shorter than 500 nucleotides (option -l)
+#trim the first 10 nucleotides off all reads (option –headcrop)
+
+NanoFilt –l 500 --headcrop 10 Labrenzia_longread_nanopore.fastq.gz
+gunzip -c Labrenzia_longread_nanopore.fastq.gz | NanoFilt -q 10 -l 500| gzip > HQ_roseibium_longreads.fastq.gz
+
+################### Long read assembly ##########################################################
+#do a long assembly first to get a preliminary feel of what the hybrid assembly should assemble, since Unicycler
+#will make an assembly using the long reads and polish with short reads
+
+#Flye:
+flye --nano-corr HQ_roseibium_longreads.fastq.gz --out-dir out_flye_08052022 --threads 4 # gives an "assembly.fasta"
+
+##now index reads with bowtie
+bwa index assembly.fasta
+bwa mem -x ont2d assembly.fasta HQ_roseibium_longreads.fastq.gz > long_reads_HQ_roseibium.sam
+
+#convert results to a sorted, indexed bam file to put into pilon
+#so first convert sam to bam, if samtools hasn't been updated, use an older version 
+
+samtools view -S -b long_reads_HQ_roseibium.sam > long_readsHQ_roseibium.bam
+
+#view it
+samtools view -H long_readsHQ_roseibium.bam
+
+#sort it to order according to its postion in the genome 
+samtools sort long_readsHQ_roseibium.bam -o sorted_HQ_roseibium.bam
+samtools view -H sorted_HQ_roseibium.bam
+#index a file
+samtools index sorted_HQ_roseibium.bam
+
+#created a .bai file
+
+#now pilon
+pilon --genome  assembly.fasta --unpaired sorted_HQ_roseibium.bam --output pilon.out
+
+#now checkm how complete is it?
+#place the assembly fasta in a folder, labeled "checkmin" and your output will be checkmout_longreads
+
+checkm lineage_wf -x fasta checkmin checkmout_longreads #do this again but with unicycler assembly fasta output as well
+
+################ Hybrid Assembly ##############################################################
+#will need 16 CPUs per task, 120GB memory, 12:00hrs (max)
+unicycler -1 short_1.fastq.gz -2 short_2.fastq.gz -l HQ_roseibium_longreads.fastq.gz -o output_unicycler_dir
+
+############### Visualize circularization on Bandage ###########################################
+#Input the assembly.gfa file (from Unicycler) onto Bandage, to view the circularization of chromosomes and plasmids
+#File> load graph> click "Entire graph" and "Draw Graph" for visualization
+
+
+
+
