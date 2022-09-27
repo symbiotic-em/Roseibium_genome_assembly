@@ -8,6 +8,14 @@ conda activate hybrid_assembly
 #download "bandage" visualization tool: https://rrwick.github.io/Bandage/
 
 ################ QC short and long reads ########################################################
+#fastqc files and check output
+#run fastqc
+fastqc *.fastq.gz
+
+# move the results to your folder
+ mv *fastqc* /myfolder/ofchoice
+#determine if reads are acceptable quality, if so, proceed:
+
 #QC short reads with fastp
 fastp --in1 59_1_S254_R1_001.fastq.gz  --in2  59_1_S254_R2_001.fastq.gz --out1 short_1.fastq.gz --out2 short_2.fastq.gz 
 
