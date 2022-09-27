@@ -1,5 +1,6 @@
 # Roseibium sp. Sym1 hybrid genome assembly
 Script and output files for hybrid genome assembly of the bacterium, Roseibium sp. 
+
 Emily Aguirre, emilyagu@usc.edu
 
 We sequenced and assembled the genome of a ubiquitous bacterial associate, Roseibium (formerly known as Labrenzia sp.) of the cnidarian microalgal symbiont, Symbiodiniaceae linuchae. Long reads were sequenced using the MinION Oxford Nanopore platform. Short reads were sequenced using Illumina NextSeq 2000 platform (paired end reads of 2x150bp). Both types of reads were used to build a hybrid assembly of the bacterial genome.
