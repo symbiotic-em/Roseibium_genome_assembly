@@ -1,7 +1,7 @@
 ############## Getting ready ###################################################################
 #activate the conda environment that has all necessary packages, mine is "hybrid_assembly"
 conda activate hybrid_assembly
-#unicycler, fastp, NanoFilt, checkm, pilon, flye
+#unicycler, fastp, NanoFilt, checkm, pilon, flye, fastqc
 
 #make sure you have sufficient allocation/memory on the server you will be using 
 
