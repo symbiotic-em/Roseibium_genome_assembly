@@ -27,8 +27,7 @@ NanoFilt –l 500 --headcrop 10 Labrenzia_longread_nanopore.fastq.gz
 gunzip -c Labrenzia_longread_nanopore.fastq.gz | NanoFilt -q 10 -l 500| gzip > HQ_roseibium_longreads.fastq.gz
 
 ################### Long read assembly ##########################################################
-#do a long assembly first to get a preliminary feel of what the hybrid assembly should assemble, since Unicycler
-#will make an assembly using the long reads and polish with short reads
+# for fun: do a long assembly first to get a preliminary feel of what the hybrid assembly should assemble
 
 #Flye:
 flye --nano-corr HQ_roseibium_longreads.fastq.gz --out-dir out_flye_08052022 --threads 4 # gives an "assembly.fasta"
