@@ -11,7 +11,9 @@ conda activate hybrid_assembly
 #fastqc files and check output
 #run fastqc
 fastqc *.fastq.gz
-#if you get an error "out of memory" then run it with more threads and use the flag -t and 24 threads, this will prob happen with the long reads
+#if you get an error "Exception in thread "Thread-1" java.lang.OutOfMemoryError: Java heap space"
+#then use the flag -t and 24 threads, this will prob happen with the long reads.
+
 fastqc Labrenzia_logread_nanopore.fastq.gz -t 24
 
 # move the results to your folder
