@@ -57,12 +57,12 @@ samtools index sorted_HQ_roseibium.bam
 #created a .bai file
 
 #now pilon
-pilon --genome  assembly.fasta --unpaired sorted_HQ_roseibium.bam --output pilon.out ## do this again but with unicycler assembly fasta output as well, instead of using the regular long-reads assembly output by flye use the Unicycler one, that will be the only change 
+pilon --genome  assembly.fasta --unpaired sorted_HQ_roseibium.bam --output pilon.out 
 
 #now checkm how complete is it?
 #place the assembly fasta in a folder, labeled "checkmin" and your output will be checkmout_longreads
 
-checkm lineage_wf -x fasta checkmin checkmout_longreads # do this again but with unicycler assembly fasta output as well
+checkm lineage_wf -x fasta checkmin checkmout_longreads # do this again, but with unicycler assembly fasta output from below as well
 
 ################ Hybrid Assembly ##############################################################
 #will need 16 CPUs per task, 120GB memory, 12:00hrs (max)
@@ -71,6 +71,22 @@ unicycler -1 short_1.fastq.gz -2 short_2.fastq.gz -l HQ_roseibium_longreads.fast
 ############### Visualize circularization on Bandage ###########################################
 #Input the assembly.gfa file (from Unicycler) onto Bandage, to view the circularization of chromosomes and plasmids
 #File> load graph> click "Entire graph" and "Draw Graph" for visualization
+
+
+############ Calculate average genome coverage for the hybrid assembly fasta ################################################
+
+#create a bam file using your unicycler output (as in lines 39-55), named "sorted_unicycler_assembly.bam"
+
+#you will extract the average genome coverage for covered regions from the .bam file (see the forum on biostars --> https://www.biostars.org/p/356937/ and https://www.biostars.org/p/5165/ for a more thorough explanation)
+samtools depth sorted_unicycler_assembly.bam |  awk '{sum+=$3} END { print "Average = ",sum/NR}' # it was 54.7183 so 55X on average
+
+#the NR above needs to be substituted with the size of your genome, so get that here
+samtools view -H sorted_unicycler_assembly.bam | grep -P '^@SQ' | cut -f 3 -d ':' | awk '{sum+=$1} END {print sum}' #7257095
+
+#now that we have the size, go ahead and input that into the code from line 82
+samtools depth sorted_unicycler_assembly.bam  |  awk '{sum+=$3} END { print "Average = ",sum/7257095}' #still 54.7183 so 55X coverage 
+
+
 
 
 
