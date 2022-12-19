@@ -1,7 +1,7 @@
 ############## Getting ready ###################################################################
 #activate the conda environment that has all necessary packages, mine is "hybrid_assembly"
 conda activate hybrid_assembly
-#unicycler, fastp, NanoFilt, checkm, pilon, flye, fastqc, samtools, bwa
+#unicycler, fastp, NanoFilt, checkm, pilon, flye, fastqc, samtools, bwa and assembly-stats for N50
 
 #make sure you have sufficient allocation/memory on the server you will be using 
 
@@ -86,8 +86,8 @@ samtools view -H sorted_unicycler_assembly.bam | grep -P '^@SQ' | cut -f 3 -d ':
 #now that we have the size, go ahead and input that into the code from line 82
 samtools depth sorted_unicycler_assembly.bam  |  awk '{sum+=$3} END { print "Average = ",sum/7257095}' #still 54.7183 so 55X coverage 
 
-
-
+######### Assembly-stats ####################################
+assembly-stats labrenzia_qc_longreads.fastq >> N50_longread_stat # N50=8,039
 
 
 
